@@ -1,0 +1,70 @@
+<?xml version='1.0'?>
+<configuration xmlns="urn:activemq"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xi="http://www.w3.org/2001/XInclude"
+               xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+
+   <core xmlns="urn:activemq:core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="urn:activemq:core ">
+
+      <name>facio-amq</name>
+
+
+      <connectors>
+            <!-- Connector used to be announced through cluster connections and notifications -->
+            <connector name="artemis">tcp://0.0.0.0:61617</connector>
+            <connector name = "node0">tcp://amqbroker0:61616</connector>
+      </connectors>
+
+      <acceptors>
+
+         <!-- Acceptor for every supported protocol -->
+         <acceptor name="artemis">tcp://0.0.0.0:61617?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE;useEpoll=true;amqpCredits=1000;amqpLowCredits=300;amqpDuplicateDetection=true</acceptor>
+
+         <!-- AMQP Acceptor.  Listens on default AMQP port for AMQP traffic.-->
+         <acceptor name="amqp">tcp://0.0.0.0:5673?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=AMQP;useEpoll=true;amqpCredits=1000;amqpLowCredits=300;amqpDuplicateDetection=true</acceptor>
+
+         <!-- STOMP Acceptor. -->
+         <acceptor name="stomp">tcp://0.0.0.0:61614?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=STOMP;useEpoll=true</acceptor>
+
+         <!-- HornetQ Compatibility Acceptor.  Enables HornetQ Core and STOMP for legacy HornetQ clients. -->
+         <acceptor name="hornetq">tcp://0.0.0.0:5446?anycastPrefix=jms.queue.;multicastPrefix=jms.topic.;protocols=HORNETQ,STOMP;useEpoll=true</acceptor>
+
+         <!-- MQTT Acceptor -->
+         <acceptor name="mqtt">tcp://0.0.0.0:1884?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=MQTT;useEpoll=true</acceptor>
+
+      </acceptors>
+
+
+
+      <cluster-user>cluster-admin</cluster-user>
+      <cluster-password>password-admin</cluster-password>
+
+      <cluster-connections>
+         <cluster-connection name="my-cluster">
+            <connector-ref>artemis</connector-ref>
+            <message-load-balancing>ON_DEMAND</message-load-balancing>
+            <max-hops>0</max-hops>
+            <static-connectors>
+               <connector-ref>node0</connector-ref>
+            </static-connectors>
+         </cluster-connection>
+      </cluster-connections>
+
+      <ha-policy>
+         <shared-store>
+            <slave>
+               <failover-on-shutdown>true</failover-on-shutdown>
+            </slave>
+         </shared-store>
+      </ha-policy>
+
+      <addresses>
+         <address name="ordernumbers">
+            <anycast>
+               <queue name="ordernumbers"/>
+            </anycast>
+         </address>
+      </addresses>
+   </core>
+</configuration>

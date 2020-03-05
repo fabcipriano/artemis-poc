@@ -1,0 +1,29 @@
+version: '3.3'
+ 
+services:
+ 
+  amqbroker0:
+    image: vromero/activemq-artemis:2.11.0
+    container_name: amqbroker00
+    environment:
+      ARTEMIS_USERNAME: fabianocp
+      ARTEMIS_PASSWORD: amadeus
+    volumes:
+      - ./shared-data:/var/lib/artemis/data
+      - ./server0-etc:/var/lib/artemis/etc-override
+    ports:
+      - 8161:8161
+      - 61616:61616
+
+  amqbroker1:
+    image: vromero/activemq-artemis:2.11.0
+    container_name: amqbroker01
+    environment:
+      ARTEMIS_USERNAME: fabianocp
+      ARTEMIS_PASSWORD: amadeus
+    volumes:
+      - ./shared-data:/var/lib/artemis/data
+      - ./server1-etc:/var/lib/artemis/etc-override
+    ports:
+      - 8162:8161
+      - 61617:61617
