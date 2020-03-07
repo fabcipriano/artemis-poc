@@ -142,3 +142,8 @@ src/main/webapp/WEB-INF/classes/
 # ESLint
 ######################
 .eslintcache
+
+######################
+# Artemis
+######################
+docker/shared-data

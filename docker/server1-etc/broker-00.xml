@@ -55,6 +55,7 @@
          <shared-store>
             <slave>
                <failover-on-shutdown>true</failover-on-shutdown>
+               <allow-failback>true</allow-failback>
             </slave>
          </shared-store>
       </ha-policy>

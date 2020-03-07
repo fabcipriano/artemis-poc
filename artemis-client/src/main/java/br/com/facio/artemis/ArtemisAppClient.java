@@ -23,12 +23,13 @@ public class ArtemisAppClient  implements ApplicationRunner {
         LOG.info("Start sending messages ...");
         LOG.info("Spring Boot Artemis Client Example");
 
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 10000; i++) {
             sender.generateMessageToSend();
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.MILLISECONDS.sleep(100);
         }
         LOG.info("Messages sent ... waiting");
-        TimeUnit.SECONDS.sleep(60);
+        TimeUnit.SECONDS.sleep(600);
+        LOG.info("Done.");
     }
 
     public static void main(String[] args) {
